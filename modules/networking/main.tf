@@ -1,4 +1,4 @@
-// TODO break public and private into separate AZs
+
 data "aws_availability_zones" "available" {}
 
 module "vpc" {
@@ -12,8 +12,6 @@ module "vpc" {
   enable_nat_gateway               = true
   single_nat_gateway               = true
 }
-
-// SG to allow SSH + HTTP connections from anywhere
 resource "aws_security_group" "allow_ssh_pub" {
   name        = "${var.namespace}-allow_ssh"
   description = "Allow SSH and HTTP inbound traffic"
@@ -46,8 +44,6 @@ resource "aws_security_group" "allow_ssh_pub" {
     Name = "${var.namespace}-allow_ssh_pub"
   }
 }
-
-// SG to only allow SSH connections from VPC public subnets
 resource "aws_security_group" "allow_ssh_priv" {
   name        = "${var.namespace}-allow_ssh_priv"
   description = "Allow SSH inbound traffic"
