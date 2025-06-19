@@ -1,4 +1,4 @@
-// Use Ubuntu 20.04 AMI from Canonical
+
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"] # Canonical (official Ubuntu publisher)
@@ -9,7 +9,7 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-# EC2 instance in public subnet (with NGINX installed)
+
 resource "aws_instance" "ec2_public" {
   ami                         = data.aws_ami.ubuntu.id
   associate_public_ip_address = true
@@ -22,7 +22,7 @@ resource "aws_instance" "ec2_public" {
     "Name" = "${var.namespace}-EC2-PUBLIC"
   }
 
-  # Copy SSH key to Ubuntu user's home dir
+  
   provisioner "file" {
     source      = "./${var.key_name}.pem"
     destination = "/home/ubuntu/${var.key_name}.pem"
@@ -35,7 +35,7 @@ resource "aws_instance" "ec2_public" {
     }
   }
 
-  # Install NGINX and start it on Ubuntu
+  
   provisioner "remote-exec" {
     inline = [
       "chmod 400 ~/${var.key_name}.pem",
@@ -54,7 +54,7 @@ resource "aws_instance" "ec2_public" {
   }
 }
 
-#  EC2 instance in private subnet (no NGINX, no public IP)
+
 resource "aws_instance" "ec2_private" {
   ami                         = data.aws_ami.ubuntu.id
   associate_public_ip_address = false
